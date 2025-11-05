@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Builder
 @Data
-public class TempetureLogOutput {
+public class TempetureLogData {
     private UUID id;
     private TSID sensorID;
     private OffsetDateTime registeredAt;
