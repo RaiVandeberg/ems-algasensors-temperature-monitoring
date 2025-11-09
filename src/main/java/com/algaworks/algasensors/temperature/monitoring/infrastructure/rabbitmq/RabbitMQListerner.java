@@ -2,6 +2,7 @@ package com.algaworks.algasensors.temperature.monitoring.infrastructure.rabbitmq
 
 
 import com.algaworks.algasensors.temperature.monitoring.api.model.TempetureLogData;
+import com.algaworks.algasensors.temperature.monitoring.domain.service.SensorAlertService;
 import com.algaworks.algasensors.temperature.monitoring.domain.service.TemperatureMonitoringService;
 import io.hypersistence.tsid.TSID;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ import static com.algaworks.algasensors.temperature.monitoring.infrastructure.ra
 public class RabbitMQListerner {
 
     private final TemperatureMonitoringService temperatureMonitoringService;
+    private final SensorAlertService sensorAlertService;
 
     @RabbitListener(queues = QUEUE_PROCESS_TEMPERATURE, concurrency = "2-3")
     @SneakyThrows
@@ -38,6 +40,7 @@ public class RabbitMQListerner {
     @RabbitListener(queues = QUEUE_ALERTING, concurrency = "2-3")
     @SneakyThrows
     public void handleAlerting(@Payload TempetureLogData temperatureLogData){
+        sensorAlertService.handleAlert(temperatureLogData);
         Thread.sleep(Duration.ofSeconds(5));
     }
 
